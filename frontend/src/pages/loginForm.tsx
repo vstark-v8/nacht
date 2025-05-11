@@ -2,20 +2,21 @@ import { useState } from 'react'
 import Input from '../components/input'
 import Button from '../components/button'
 import { useNavigate } from 'react-router'
+import { useAuth } from '../context/AuthContext'
 
 type LoginFormProps = {
-  onLoginSuccess: (value:boolean) => void
 }
 
-function LoginForm({ onLoginSuccess }: LoginFormProps)  {
+function LoginForm({ }: LoginFormProps)  {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   const navigate = useNavigate()
+  const { login } = useAuth()
+
 
   const handleLoginSuccess = () => {
-    onLoginSuccess(true);
     navigate('/files')
   }
 
@@ -34,7 +35,7 @@ function LoginForm({ onLoginSuccess }: LoginFormProps)  {
     if (response.ok) {
       response.json().then(
         (data) => {
-          localStorage.setItem('token', data.token);
+          login(data.token);
           handleLoginSuccess();
         }
       );

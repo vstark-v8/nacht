@@ -1,1 +1,10 @@
+# Banco de dados
 db.sqlite3
+
+# Cache de Python
+nacht/__pycache__/
+
+# Arquivos compilados
+*.pyc
+*.pyo
+*.pyd

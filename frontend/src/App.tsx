@@ -1,35 +1,31 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router'
 import LoginForm from './pages/loginForm'
 import FileListPage from './pages/ListFiles'
-import { useState, useEffect} from 'react'
+import { AuthProvider, useAuth } from './context/AuthContext'
 
+function AppRoutes() {
+  const { isAuth } = useAuth()
 
-function App() {
-  const [isAuth,setIsAuth] = useState(false)
-  useEffect(() =>{
-        isAuthenticated();
-      }
-  ,[])
-  
-  const isAuthenticated = () => {
-    setIsAuth(localStorage.getItem('token') !== null)
-  }
   return (
-    <Router>
-      <Routes>
+    <Routes>
       <Route
-          path="/"
-          element={isAuth ? <Navigate to="/files" /> : <LoginForm onLoginSuccess={setIsAuth} />}
-        />
-
-        {/* Rota de arquivos, se não estiver autenticado, redireciona para / */}
-        <Route
-          path="/files"
-          element={isAuth ? <FileListPage /> : <Navigate to="/" />}
-        />
-      </Routes>
-    </Router>
+        path="/"
+        element={!isAuth ? <LoginForm /> : <Navigate to="/files" />}
+      />
+      <Route
+        path="/files"
+        element={isAuth ? <FileListPage /> : <Navigate to="/" />}
+      />
+    </Routes>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
+  )
+}

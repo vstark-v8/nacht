@@ -30,7 +30,7 @@ class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = [
-            'title', 'description','file' 
+            'id','title', 'description','file' 
         ]
 
     def create(self, validated_data):
